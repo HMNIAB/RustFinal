@@ -1,11 +1,21 @@
-use std::io::{Read, Write};
-use std::net::{TcpListener, TcpStream};
 use std::sync::{Arc, Mutex};
-use std::thread;
-use std::time::Duration;
+use tokio;
 
-const ADDRESS: &str = "127.0.0.1:5000";
+#[derive(Clone)]
+struct Server {
+    counter: Arc<Mutex<i32>>, // Shared state using Mutex and Arc
+}
 
-fn main() {
-    println!("Hello, server!");
+impl Server {
+    fn new() -> Self {
+        Server {
+            counter: Arc::new(Mutex::new(0)),
+        }
+    }
+}
+
+#[tokio::main]
+async fn main() {
+    let server = Server::new();
+    println!("Server initialized.");
 }
