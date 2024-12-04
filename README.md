@@ -16,7 +16,44 @@ Here will be a description of overall design to include key modules, components,
 Here will be an explanation of the tools, libraries, and frameworks used in conjunction with Rust
 
 #### Data Flow
-Here will be an illustration of how data moves through the application, from user input to processing and output. Diagrams will be used ass applicable
+       +-------------------------+
+       |    Client Requests      |
+       +-------------------------+
+                  |
+                  v
+       +-------------------------+
+       |    Server (Main Thread)  |
+       |                         |
+       | - Accepts client requests|
+       +-------------------------+
+                  |
+       +----------+-----------+
+       |                      |
+       v                      v
++--------------+     +--------------+
+|  Worker Thread 1|    |  Worker Thread 2|
++--------------+     +--------------+
+        |                    |
+        v                    v
+   +-----------+          +-----------+
+   |  Process  |          |  Process  |
+   |  Client   |          |  Client   |
+   |  Request  |          |  Request  |
+   +-----------+          +-----------+
+        |                    |
+        v                    v
+   +-----------+          +-----------+
+   | Send Response|       | Send Response|
+   +-----------+          +-----------+
+        |                    |
+        +--------------------+
+                  |
+                  v
+       +-------------------------+
+       |  Main Server Loop       |
+       | (Handle new connections)|
+       +-------------------------+
+
 
 ### Lessons Learned
 Rust is not an easy language to use as a beginner. While each language touts their own set of robust features, ease of use, etc Rust offers memory safety and compile time guarantees. While this may be worth its weight in gold in a setting with critical systems, the guarantees that are given from the language are overshadowed by the development time and general headaches to a novice programmer. While Go is not an end all be all language, it provides near identical speeds with far simpler mechanisms to implement a web-server. Additionally, Go is much faster to develop in and has a significant amount of literature out there for the novice programmer.
