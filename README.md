@@ -8,9 +8,10 @@ This is an implementation of a multi-threaded web server that loads a simple HTM
 I elected to create a multi-threaded server as my interests as of late has been Web-Development with focus on Ruby on Rails and Go. While all of these languages have a purpose - I wanted to examine how Rust compares on the backend to a language such as Go. As both Rust and Go have their own methods of implementing concurrency it is interesting to see where each thrives and any potential shortcomings. 
 
 ### Design and Architecture
+image here -> 
 
 #### Application Structure
-Here will be a description of overall design to include key modules, components, or systems.
+The server utilizes the following crates: 
 
 #### Technology Stack
 Here will be an explanation of the tools, libraries, and frameworks used in conjunction with Rust

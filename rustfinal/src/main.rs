@@ -1,3 +1,5 @@
+use log::{info};
+use env_logger;
 use std::sync::{Arc, Mutex};
 use tokio;
 
@@ -16,6 +18,8 @@ impl Server {
 
 #[tokio::main]
 async fn main() {
+    env_logger::init(); //initialize the logger
+    info!("Program started.");
     let server = Server::new();
-    println!("Server initialized.");
+    info!("Sever initialized.");
 }
