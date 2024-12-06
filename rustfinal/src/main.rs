@@ -21,6 +21,19 @@ impl Server {
         *counter += 1;
         info!("Handled request, counter: {}", *counter);
     }
+    async fn start(&self, num_requests: usize) { //usize to prevent overflow
+        let mut tasks = vec![];
+        for _ in 0..num_requests {
+            let server_clone = self.clone();
+            let task = tokio::spawn(async move {
+                server_clone.handle_request().await;
+            });
+            tasks.push(task);
+        }
+        for task in tasks { //wait for all tasks
+            task.await.unwrap();
+        }
+    }
 }
 
 #[tokio::main]
@@ -29,5 +42,6 @@ async fn main() {
     info!("Program started.");
     let server = Server::new();
     info!("Sever initialized.");
-    server.handle_request().await; //handle simmed request
+    server.start(5).await; //handling 5 requests concurrently    //server.handle_request().await; //handle simmed request
+
 }
