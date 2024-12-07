@@ -1,5 +1,6 @@
-use log::{info};
+use log::{info, error};
 use env_logger;
+use reqwest::Error;
 use std::sync::{Arc, Mutex};
 use tokio;
 use std::time::Duration;
@@ -33,6 +34,17 @@ impl Server {
         for task in tasks { //wait for all tasks
             task.await.unwrap();
         }
+    }
+    async fn make_request(&self, url: &str) -> Result<(),Error> {
+        let client = reqwest::Client::new();
+        let response = client.get(url).send().await?;
+        
+        if response.status().is_success() {
+            info!("Request to {} completed with status: {}", url, response.status());
+        } else {
+            error!("Request to {} failed with status: {}", url, response.status());
+        }
+        Ok(())
     }
 }
 
