@@ -91,7 +91,7 @@ mod tests {
     async fn test_make_request_failure() {
         let server = Server::new();
         let result = server.make_request("https://notaurl.url").await;
-        assert!(!result.is_ok(), "Should be silent!");
+        assert!(!result.is_ok(), "Request should fail.. silently?");
     }
     #[tokio::test]
     async fn test_multiple_concurrent_requests() {
