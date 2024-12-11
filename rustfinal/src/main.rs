@@ -20,9 +20,17 @@ impl Server {
     async fn handle_request(&self) {
         //sim request handling with a sleep of 100ms
         tokio::time::sleep(Duration::from_millis(100)).await;
-        let mut counter = self.counter.lock().unwrap(); //lock the counter and increment
-        *counter += 1;
-        info!("Handled request, counter: {}", *counter);
+        match self.counter.lock() {
+            Ok(mut counter) => {
+                *counter += 1;
+                info!("Handled request, counter: {}", *counter);
+            } Err(poisoned) => {
+                error!("Mutex was poisoned, recovering...");
+                let mut counter = poisoned.into_inner();
+                *counter += 1;
+                info!("Handled request after poisoning, counter: {}", *counter);
+            }
+        }
     }
     async fn start(&self, num_requests: usize) {
         //usize to prevent overflow
@@ -91,7 +99,7 @@ mod tests {
     async fn test_make_request_failure() {
         let server = Server::new();
         let result = server.make_request("https://notaurl.url").await;
-        assert!(!result.is_ok(), "Request should fail.. silently?");
+        assert!(!result.is_ok(), "Request should fail but pass test");
     }
     #[tokio::test]
     async fn test_multiple_concurrent_requests() {
