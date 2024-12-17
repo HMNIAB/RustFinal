@@ -73,7 +73,7 @@ async fn main() {
     info!("Program started.");
     let server = Server::new();
     info!("Sever initialized.");
-    server.start(5).await; //handling 5 requests concurrently    //server.handle_request().await; //handle simmed request
+    server.start(500).await; //handling 5 requests concurrently    //server.handle_request().await; //handle simmed request
 }
 #[cfg(test)]
 mod tests {
